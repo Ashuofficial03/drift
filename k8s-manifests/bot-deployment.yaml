@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegram-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-bot
+  template:
+    metadata:
+      labels:
+        app: telegram-bot
+    spec:
+      containers:
+      - name: bot
+        image: ashuofficial01/gitops-bot:v1
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongodb-service:27017"
+        - name: TELEGRAM_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: bot-secret
+              key: token
